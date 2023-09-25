@@ -40,20 +40,8 @@ app.post("/api/notes", (req, res) => {
 });
 
 app.delete("/api/notes/:id", (req, res) => {
-  const noteDelete = req.params.id;
-  fsUtils.readFromFile("./db/db.json").then((data) => {
-    const userNote = JSON.parse(data);
-    const indexToDelete = userNote.findIndex(
-      (userNote) => userNote.id === noteDelete
-    );
-    if (indexToDelete !== -1) {
-      userNote.splice(indexToDelete, 1);
-
-      fsUtils.writeToFile("./db/db.json", JSON.stringify(userNote)).then(() => {
-        res.json("Deleted");
-      });
-    }
-  });
+  fsUtils.deleteAndAppend(req.params.id, "./db/db.json");
+  res.json("note has been deleted");
 });
 
 app.listen(PORT, () =>
